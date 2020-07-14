@@ -1,0 +1,62 @@
+<html>
+
+<head>
+    <meta name="description" content="CSS Tabs" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/2.0.1/normalize.css">
+    <link href='https://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css'>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/css/options.css" />
+    <title>Insight's Walkover</title>
+    <meta charset=utf-8>
+</head>
+
+<body>
+    <div class="container">
+        <span class="badge">Walkover</span>
+        <span class="userName">Hello,<%=username%></h1></span>
+    </div>
+
+    <div class="tabbed">
+        <input type="radio" name="tabs" id="tab-nav-1" checked>
+        <label for="tab-nav-1">My Bookmark's</label>
+        <input type="radio" name="tabs" id="tab-nav-2">
+        <label for="tab-nav-2">Search</label>
+        <input type="radio" name="tabs" id="tab-nav-3">
+        <label for="tab-nav-3">Industry</label>
+        <div class="tabs">
+            <div>
+                <h2>My Bookmark's</h2>
+                <table id="timeTable">
+                </table>
+                <hr>
+                <button class="buttonC clear_button" id="btnClearTimes">Clear Tabs History</button>
+            </div>
+            <div>
+                <h2>Search</h2>
+                <div class="searchBox">
+                    <input class="searchInput" type="text" name="" placeholder="Search">
+                    <button class="searchButton" href="#">
+                        <i class="material-icons">
+                            search
+                        </i>
+                    </button>
+                </div>
+
+            </div>
+            <div>
+                <h2>Industry</h2>
+                <p>Duis luctus dolor ac erat luctus hendrerit. Aenean id congue magna. Proin sit amet elit vel lacus
+                    ornare dignissim imperdiet nec odio. Maecenas condimentum egestas lorem et laoreet. Donec ut leo non
+                    purus rutrum euismod vel faucibus nunc. Curabitur vel mauris nisi, vitae laoreet erat. Lorem ipsum
+                    dolor sit amet, consectetur adipiscing elit. Vestibulum ante ipsum primis in faucibus orci luctus et
+                    ultrices posuere cubilia Curae; Maecenas ipsum odio, iaculis id vulputate vitae, vestibulum at nunc.
+                    Integer non nisl lorem. Quisque lobortis congue semper. Nunc neque nisi, consequat id egestas vitae,
+                    porta vel sem.</p>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.6/prefixfree.min.js"></script>
+    <script src="/js/options.js"></script>
+</body>
+
+</html>
