@@ -1,0 +1,45 @@
+<html>
+
+<head>
+    <meta name="description" content="CSS Tabs" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/2.0.1/normalize.css">
+    <link href='https://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css'>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../css/dashboard.css" />
+    <title>Insight's Walkover</title>
+    <meta charset=utf-8>
+</head>
+
+<body>
+    <div class="container">
+        <span class="badge">Walkover</span>
+    </div>
+
+    <div class="tabbed">
+        <input type="radio" name="tabs" id="tab-nav-1" checked>
+        <label for="tab-nav-1">Similar Website's</label>
+        <div class="tabs">
+            <div>
+                <h2>Similar website's to <%=similar%></h2>
+                <div class="similar-container">
+                    <div class="keywords">
+                        <% for (var i = 0; i < json.keywords.length; i++) { %>
+                        <div class="keyword-data"><%=json.keywords[i]%></div>
+                        <% } %>
+                    </div>
+                    <div class="similar-website">
+                        <% for (var i = 0; i < json.websites.length; i++) { %>
+                        <div class="similar-link"><a href="<%=json.websites[i]%>"><%=json.websites[i]%></a></div>
+                        <% } %>
+                    </div>
+                </div>
+                <!-- <hr> -->
+                <!-- <button class="buttonC clear_button" id="btnClearTimes">Clear Tabs History</button> -->
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.6/prefixfree.min.js"></script>
+    <!-- <script src="/js/options.js"></script> -->
+</body>
+
+</html>

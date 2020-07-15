@@ -1,18 +1,18 @@
 const express = require("express");
 const app = express();
-const session = require("express-session");
 const path = require("path");
 const bodyParser = require("body-parser");
-var passport = require("passport");
-var GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
+const passport = require("passport");
 const cors = require("cors");
 const mongoose = require("mongoose");
-var find = require("mongoose-find-or-create");
 const users = require("./model/userModel");
 const cookieSession = require("cookie-session");
-const profileRoute = require('./routes/profileRoute');
-// const html = require('html');
-//const passportSetup = require("./config/passport-setup");
+const profileRoute = require("./routes/profileRoute");
+const passportSetup = require("./config/passport-setup");
+const dbUpdate = require('./routes/dbRoute');
+const similarWebsite = require('./routes/similarWebsite');
+const keys = require('./config/keys')
+
 
 app.use(bodyParser.json());
 app.use(
@@ -31,23 +31,14 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-var configAuth = {
-  googleAuth: {
-    clientID: "995926344319-p5eh5t9qgjh19oclosqiqi2mnmpgobit.apps.googleusercontent.com",
-    clientSecret: "GcExVRb7z5yKiEMb1egg4EZ6",
-    callbackURL: "http://localhost:3000/auth/google/callback"
-  }
-};
-
 app.use(express.static(path.join(__dirname, "public")));
-
 app.set("views", path.join(__dirname, "public/views"));
 app.engine("html", require("ejs").renderFile);
 app.set("view engine", "html");
 
-app.use(cors());
-//Access-Control-Allow-Origin *
 
+//Access-Control-Allow-Origin *
+app.use(cors());
 app.options("*", cors());
 
 //#region Google Strategy
@@ -61,60 +52,29 @@ passport.deserializeUser((id, done) => {
   });
 });
 
-passport.use(
-  new GoogleStrategy({
-      clientID: configAuth.googleAuth.clientID,
-      clientSecret: configAuth.googleAuth.clientSecret,
-      callbackURL: configAuth.googleAuth.callbackURL
-    },
-    function (accessToken, refreshToken, profile, done) {
-      //console.log(profile)
-      users
-        .findOne({
-          email: profile.emails[0].value
-        })
-        .then(currentUser => {
-          if (currentUser) {
-            done(null, currentUser);
-            console.log("current user" + currentUser);
-          } else {
-            new users({
-                email: profile.emails[0].value,
-                name: profile.displayName
-              })
-              .save()
-              .then(newUser => {
-                done(null, newUser);
-                console.log("new user" + newUser);
-              });
-          }
-        });
-    }
-  )
-);
+app.use("/profile", profileRoute);
 
-app.use('/profile', profileRoute);
+function loggedIn(req, res, next) {
+  if (req.user) {
+    next();
+  } else {
+    res.redirect("/login");
+  }
+}
+
+app.get("/auth/google", loggedIn, (req, res, next) => {
+  res.redirect("/profile");
+  next();
+});
+
 app.get(
-  "/auth/google",
+  "/login",
   passport.authenticate("google", {
     scope: ["profile", "email"]
   })
 );
 
-app.post("/", (req, res) => {
-  console.log("request method :" + req.method);
-  console.log(
-    "-------------------------------------------------------------------------------"
-  );
-  console.log(req.body);
-  console.log(
-    "-------------------------------------------------------------------------------"
-  );
-  res.render("options", {
-    username: req.user.name
-  });
-});
-
+app.post("/", dbUpdate);
 
 app.get("/auth/google/callback", passport.authenticate("google"), function (
   req,
@@ -122,28 +82,20 @@ app.get("/auth/google/callback", passport.authenticate("google"), function (
 ) {
   console.log("I am working!");
   console.log(req.user.name);
-  res.redirect('/profile/');
+  res.redirect("/profile/");
 });
 
-
-
-// app.get("/loginsuccess", function (req, res) {
-//   console.log("here I am");
-//   res.render("options.html");
-// });
-
+app.get("/similarWebsite", similarWebsite);
 
 
 const PORT = process.env.PORT || 3000;
 mongoose.Promise = global.Promise;
 mongoose
-  .connect(
-    "mongodb+srv://praveen_12:praveens12@cluster0-ruqab.mongodb.net/insights?retryWrites=true&w=majority", {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      useFindAndModify: false
-    }
-  )
+  .connect(keys.mongoDb, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false
+  })
   .then(() => console.log("Database Connected"))
   .catch(error => console.log(error));
 
