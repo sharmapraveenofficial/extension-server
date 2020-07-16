@@ -14,17 +14,21 @@
     <div class="container">
         <span class="badge">Walkover</span>
         <span class="userName">Hello,<%=username%></h1></span>
+        <div class="button">
+            <form method="get" action="/logout">
+                <input type="submit" value="Logout">
+            </form>
+        </div>
     </div>
 
     <div class="tabbed">
         <input type="radio" name="tabs" id="tab-nav-1" checked>
-        <label for="tab-nav-1">My Bookmark's</label>
+        <label for="tab-nav-1">Search</label>
         <input type="radio" name="tabs" id="tab-nav-2">
-        <label for="tab-nav-2">Search</label>
+        <label for="tab-nav-2">Insight's</label>
         <input type="radio" name="tabs" id="tab-nav-3">
-        <label for="tab-nav-3">Industry</label>
         <div class="tabs">
-            <div>
+            <!-- <div>
                 <h2>My Bookmark's</h2>
                 <div class="bookmark-container">
                     <% if(entries.length > 0){ %>
@@ -36,9 +40,7 @@
                         <div class="bookmark-time">Time Spend : <%=entries[i].trackedSeconds%></div>
                         <div class="bookmark-similar">
                             <form method="get" action="/similarWebsite">
-                                <!-- <input type="text" hidden value="<%=entries[i].url%>"> -->
-                                <input type="submit" id="similar" value="Similar" name="<%=entries[i].url%>">
-                                <!-- <a href="#" type="submit">Similar</a> -->
+                                <input type="submit" id="similar" value="Similar" name="<%=entries[i].similarWebsite%>">
                             </form>
                         </div>
                     </div>
@@ -47,9 +49,9 @@
                     <p>No Data Found</p>
                     <% } %>
                 </div>
-                <!-- <hr> -->
-                <!-- <button class="buttonC clear_button" id="btnClearTimes">Clear Tabs History</button> -->
-            </div>
+                <hr>
+               <button class="buttonC clear_button" id="btnClearTimes">Clear Tabs History</button> 
+            </div> -->
             <div>
                 <h2>Search</h2>
                 <div class="searchBox">
@@ -60,10 +62,30 @@
                         </i>
                     </button>
                 </div>
+                <h2>My Bookmark's</h2>
+                <div class="bookmark-container">
+                    <% if(entries.length > 0){ %>
+                    <% for (var i = 0; i < entries.length; i++) { %>
+                    <div class="bookmark-div">
+                        <img src="<%=entries[i].favicon%>" class=" bookmark-img" alt="icon48.png" srcset="">
+                        <div class="bookmark-domain"><%=entries[i].url%></div>
+                        <div class="bookmark-hashtag"><%=entries[i].hashtag%></div>
+                        <div class="bookmark-time">Time Spend : <%=entries[i].trackedSeconds%></div>
+                        <div class="bookmark-similar">
+                            <form method="get" action="/similarWebsite">
+                                <input type="submit" id="similar" value="Similar" name="<%=entries[i].similarWebsite%>">
+                            </form>
+                        </div>
+                    </div>
+                    <% } %>
+                    <% } else{ %>
+                    <p>No Data Found</p>
+                    <% } %>
+                </div>
 
             </div>
             <div>
-                <h2>Industry</h2>
+                <h2>Insight's</h2>
                 <p>Duis luctus dolor ac erat luctus hendrerit. Aenean id congue magna. Proin sit amet elit vel lacus
                     ornare dignissim imperdiet nec odio. Maecenas condimentum egestas lorem et laoreet. Donec ut leo non
                     purus rutrum euismod vel faucibus nunc. Curabitur vel mauris nisi, vitae laoreet erat. Lorem ipsum

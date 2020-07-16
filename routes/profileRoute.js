@@ -1,5 +1,4 @@
 const router = require("express").Router();
-const users = require("../model/userModel");
 const bookmarks = require("../model/userBookmark");
 
 const authCheck = (req, res, next) => {
@@ -25,9 +24,9 @@ router.get("/", authCheck, (req, res, next) => {
                         }
                         let str = entry[0].split(".");
                         if (str[0] !== "www") {
-                            entry[1].url = "www." + entry[0];
+                            entry[1].similarWebsite = "www." + entry[0];
                         } else {
-                            entry[1].url = entry[0];
+                            entry[1].similarWebsite = entry[0];
                         }
                         let time_ = entry[1].trackedSeconds;
                         let timer = secondsToHms(time_);

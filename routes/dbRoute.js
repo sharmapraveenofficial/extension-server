@@ -2,15 +2,6 @@ const users = require("../model/userModel");
 const bookmarks = require("../model/userBookmark");
 
 module.exports = (req, res) => {
-    Object.entries(req.body).forEach(entry => {
-        let str = entry[0].split(".");
-        if (!str[0] === "www") {
-            //console.log(entry[0]);
-        } else {
-            // console.log("www." + entry[0]);
-        }
-    });
-
     try {
         users
             .findOne({

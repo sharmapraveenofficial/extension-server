@@ -9,10 +9,9 @@ const users = require("./model/userModel");
 const cookieSession = require("cookie-session");
 const profileRoute = require("./routes/profileRoute");
 const passportSetup = require("./config/passport-setup");
-const dbUpdate = require('./routes/dbRoute');
-const similarWebsite = require('./routes/similarWebsite');
-const keys = require('./config/keys')
-
+const dbUpdate = require("./routes/dbRoute");
+const similarWebsite = require("./routes/similarWebsite");
+const keys = require("./config/keys");
 
 app.use(bodyParser.json());
 app.use(
@@ -35,7 +34,6 @@ app.use(express.static(path.join(__dirname, "public")));
 app.set("views", path.join(__dirname, "public/views"));
 app.engine("html", require("ejs").renderFile);
 app.set("view engine", "html");
-
 
 //Access-Control-Allow-Origin *
 app.use(cors());
@@ -74,19 +72,30 @@ app.get(
   })
 );
 
+app.get("/logout", async (req, res) => {
+  await req.logout();
+  req.session = null;
+  res.clearCookie("express:sess");
+  res.clearCookie("express:sess.sig");
+  res.redirect("/home");
+});
+
+app.get("/home", (req, res) => {
+  res.render("logout");
+});
+
 app.post("/", dbUpdate);
 
 app.get("/auth/google/callback", passport.authenticate("google"), function (
   req,
   res
 ) {
-  console.log("I am working!");
+  // console.log("I am working!");
   console.log(req.user.name);
   res.redirect("/profile/");
 });
 
 app.get("/similarWebsite", similarWebsite);
-
 
 const PORT = process.env.PORT || 3000;
 mongoose.Promise = global.Promise;
