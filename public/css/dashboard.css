@@ -6,8 +6,8 @@
 
 body {
   /* background: url(https://subtlepatterns.com/patterns/use_your_illusion.png); */
-  color: black;
-  font: 1em "PT Sans", sans-serif;
+  font-family: "Helvetica";
+  background: #cad1d6;
 }
 
 ::selection {

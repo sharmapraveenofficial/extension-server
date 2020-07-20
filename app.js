@@ -36,8 +36,13 @@ app.engine("html", require("ejs").renderFile);
 app.set("view engine", "html");
 
 //Access-Control-Allow-Origin *
-app.use(cors());
-app.options("*", cors());
+app.use(
+  cors({
+    origin: "http://localhost:3006", // allow to server to accept request from different origin
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    credentials: true // allow session cookie from browser to pass through
+  })
+);
 
 //#region Google Strategy
 passport.serializeUser((user, done) => {
@@ -50,7 +55,11 @@ passport.deserializeUser((id, done) => {
   });
 });
 
-app.use("/profile", profileRoute);
+app.use("/test", (req, res, next) => {
+  console.log("Inside request");
+  res.json("test success");
+});
+app.use("/login/success", profileRoute);
 
 function loggedIn(req, res, next) {
   if (req.user) {
@@ -61,9 +70,21 @@ function loggedIn(req, res, next) {
 }
 
 app.get("/auth/google", loggedIn, (req, res, next) => {
+  console.log("Inside /auth/google ");
   res.redirect("/profile");
   next();
 });
+
+// app.get("/login/success", (req, res) => {
+//   if (req.user) {
+//     res.json({
+//       success: true,
+//       message: "user has successfully authenticated",
+//       user: req.user,
+//       cookies: req.cookies
+//     });
+//   }
+// });
 
 app.get(
   "/login",
@@ -77,7 +98,8 @@ app.get("/logout", async (req, res) => {
   req.session = null;
   res.clearCookie("express:sess");
   res.clearCookie("express:sess.sig");
-  res.redirect("/home");
+  res.redirect("http://localhost:3006");
+  // res.redirect("/home");
 });
 
 app.get("/home", (req, res) => {
@@ -86,13 +108,27 @@ app.get("/home", (req, res) => {
 
 app.post("/", dbUpdate);
 
-app.get("/auth/google/callback", passport.authenticate("google"), function (
-  req,
-  res
-) {
-  // console.log("I am working!");
-  console.log(req.user.name);
-  res.redirect("/profile/");
+app.get(
+  "/auth/google/callback",
+  //  passport.authenticate("google"), function(
+  //   req,
+  //   res
+  // ) {
+  //   // console.log("I am working!");
+  //   console.log(req.user.name);
+  //   res.redirect("/profile/");
+  // }
+  passport.authenticate("google", {
+    successRedirect: "http://localhost:3006",
+    failureRedirect: "/auth/login/failed"
+  })
+);
+
+app.get("/login/failed", (req, res) => {
+  res.status(401).json({
+    success: false,
+    message: "user failed to authenticate."
+  });
 });
 
 app.get("/similarWebsite", similarWebsite);
