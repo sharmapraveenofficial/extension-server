@@ -19,7 +19,6 @@ router.get("/", authCheck, (req, res, next) => {
         let entries = [];
         if (currentUser !== null) {
           let obj = JSON.parse(currentUser.data);
-          // console.log(obj)
           Object.entries(obj).forEach(entry => {
             if (entry[1].liked == true) {
               if (entry[1].hashtag == "") {
@@ -46,6 +45,7 @@ router.get("/", authCheck, (req, res, next) => {
                   m > 0 ? m + (m == 1 ? " minute, " : " minutes, ") : "";
                 var sDisplay =
                   s > 0 ? s + (s == 1 ? " second" : " seconds") : "";
+                // console.log(hDisplay + " " + mDisplay + " " + sDisplay);
                 return hDisplay + mDisplay + sDisplay;
               }
               entry[1].trackedSeconds = timer;
