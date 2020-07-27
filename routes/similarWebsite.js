@@ -1,12 +1,12 @@
 const fetch = require("node-fetch");
 module.exports = async function(req, res) {
-  let url = req.originalUrl.split("?");
-  let similar = url[1].split("=");
-  console.log(similar[0]);
-  let json = await getData(`http://13.235.90.61:5000/${similar[0]}/`);
-  res.render("similarWebsite", {
-    similar: similar[0],
-    json: json
+  console.log(req.query.similar);
+  let json = await getData(`http://13.235.90.61:5000/${req.query.similar}/`);
+  res.json({
+    success: true,
+    keywords: json.keywords,
+    websites: json.websites,
+    similar: req.body.similar
   });
 };
 

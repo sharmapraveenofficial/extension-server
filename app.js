@@ -11,6 +11,8 @@ const profileRoute = require("./routes/profileRoute");
 const passportSetup = require("./config/passport-setup");
 const dbUpdate = require("./routes/dbRoute");
 const similarWebsite = require("./routes/similarWebsite");
+const updateClusterData = require("./routes/updateClusterData");
+const getClusterData = require("./routes/getClusterData");
 const keys = require("./config/keys");
 
 app.use(bodyParser.json());
@@ -75,17 +77,6 @@ app.get("/auth/google", loggedIn, (req, res, next) => {
   next();
 });
 
-// app.get("/login/success", (req, res) => {
-//   if (req.user) {
-//     res.json({
-//       success: true,
-//       message: "user has successfully authenticated",
-//       user: req.user,
-//       cookies: req.cookies
-//     });
-//   }
-// });
-
 app.get(
   "/login",
   passport.authenticate("google", {
@@ -99,7 +90,6 @@ app.get("/logout", async (req, res) => {
   res.clearCookie("express:sess");
   res.clearCookie("express:sess.sig");
   res.redirect("http://localhost:3006");
-  // res.redirect("/home");
 });
 
 app.get("/home", (req, res) => {
@@ -110,14 +100,6 @@ app.post("/", dbUpdate);
 
 app.get(
   "/auth/google/callback",
-  //  passport.authenticate("google"), function(
-  //   req,
-  //   res
-  // ) {
-  //   // console.log("I am working!");
-  //   console.log(req.user.name);
-  //   res.redirect("/profile/");
-  // }
   passport.authenticate("google", {
     successRedirect: "http://localhost:3006",
     failureRedirect: "/auth/login/failed"
@@ -132,6 +114,8 @@ app.get("/login/failed", (req, res) => {
 });
 
 app.get("/similarWebsite", similarWebsite);
+app.get("/updateClusterData", updateClusterData);
+app.get("/getClusterData", getClusterData);
 
 const PORT = process.env.PORT || 3000;
 mongoose.Promise = global.Promise;
